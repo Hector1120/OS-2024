@@ -1,0 +1,37 @@
+const int LED_RED = 13; // El LED está conectado en el pin 13
+const int TEMPERATURE_SENSOR=A0;// El sensor está conectado en el pin analógico A0
+const int ENGINE = 12; // Pin para el ventilador
+
+void setup() {
+  pinMode(TEMPERATURE_SENSOR,INPUT);//Configuramos el pin del sensor de temperatura como entrada
+  pinMode(LED_RED, OUTPUT); // Configuramos el pin del LED como salida
+  pinMode(ENGINE, OUTPUT); // Configuramos el pin del ventilador como salida
+
+  // Inicialización de comunicación serial para visualización de temperatura
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Lectura de temperatura
+  int temperature=(-40+0.488155*(analogRead(TEMPERATURE_SENSOR)-20)); 
+  // Mostrar la temperatura en el Monitor Serie
+  Serial.print("Temperatura: ");
+  Serial.println(temperature);
+
+  // Validación de temperatura y control de LED y ventilador
+  if (temperature <= 5) {
+    // Si la temperatura es inferior a 5 °C, enciende el LED en intermitencia con retardo de 0.5 seg
+    digitalWrite(LED_RED, HIGH);
+    delay(500);
+    digitalWrite(LED_RED, LOW);
+    delay(500);
+  } else if (temperature >= 6 && temperature <= 25) {
+    // Si la temperatura está entre 5 °C y 25 °C, apaga el LED
+    digitalWrite(LED_RED, LOW);
+    
+  } else {
+    // Si la temperatura es mayor a 25 °C, enciende el LED y el ventilador
+    digitalWrite(LED_RED, HIGH);
+    digitalWrite(ENGINE, HIGH);
+  }
+}
