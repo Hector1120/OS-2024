@@ -1,0 +1,165 @@
+// C++ code
+//
+const int LED_GREEN = 11;
+const int LED_RED = 12;
+const int LED_YELLOW = 13;
+
+void setup()
+{
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  Serial.begin(9600); //Baudios
+  Serial.println("_Menu_");
+  Serial.println("[1]. Turn on green led");
+  Serial.println("[2]. Turn off green led");
+  Serial.println("[3]. Turn on red led");
+  Serial.println("[4]. Turn off red led");
+  Serial.println("[5]. Turn on yellow led");
+  Serial.println("[6]. Turn off yellow led");
+  Serial.println("[7]. Turn on all the lights");
+  Serial.println("[8]. Turn off all the lights");
+  Serial.println("[9]. Put the lights on flashing mode");
+  Serial.println(":::Please, press your option:::");
+}
+void loop()
+{
+  static bool flashingMode = false; // Variable para controlar el modo intermitente
+
+  if (Serial.available() > 0)
+  {
+    char opt = Serial.read();
+    if (!flashingMode) // :::Si no estamos en el modo intermitente:::
+      //::::OPCIONES::::::
+    {
+      if (opt == '1')
+      {
+        Serial.println("Green led has been turned on");
+        digitalWrite(LED_GREEN, HIGH);
+      }
+      else if (opt == '2')
+      {
+        digitalWrite(LED_GREEN, LOW);
+        Serial.println("Green led has been turned off");
+      }
+      else if (opt == '3')
+      {
+        digitalWrite(LED_RED, HIGH);
+        Serial.println("Red led has been turned on");
+      }
+      else if (opt == '4')
+      {
+        digitalWrite(LED_RED, LOW);
+        Serial.println("Red led has been turned off");
+      }
+      else if (opt == '5')
+      {
+        digitalWrite(LED_YELLOW, HIGH);
+        Serial.println("Yellow led has been turned on");
+      }
+      else if (opt == '6')
+      {
+        digitalWrite(LED_YELLOW, LOW);
+        Serial.println("Yellow led has been turned off");
+      }
+      else if (opt == '7')
+      {
+        digitalWrite(LED_GREEN, HIGH);
+        digitalWrite(LED_RED, HIGH);
+        digitalWrite(LED_YELLOW, HIGH);
+        Serial.println("All the lights have been turned on");
+      }
+      else if (opt == '8')
+      {
+        digitalWrite(LED_GREEN, LOW);
+        digitalWrite(LED_RED, LOW);
+        digitalWrite(LED_YELLOW, LOW);
+        Serial.println("All the lights have been turned off");
+      }
+      else if (opt == '9')
+      {
+        flashingMode = true; // Entrar en el modo intermitente
+        Serial.println("Flashing mode activated");
+      }
+      else
+      {
+        Serial.println("Invalid option. Try again.");
+      }
+    }
+    else // Si estamos en el modo intermitente
+    {
+      if (opt != '9') // Si se ingresa una nueva opción diferente de '9'
+      {
+        flashingMode = false; // Salir del modo intermitente
+        Serial.println("Flashing mode deactivated");
+        
+        // Procesar la nueva opción ingresada
+        if (opt == '1')
+        {
+          Serial.println("Green led has been turned on");
+          digitalWrite(LED_GREEN, HIGH);
+        }
+        else if (opt == '2')
+        {
+          digitalWrite(LED_GREEN, LOW);
+          Serial.println("Green led has been turned off");
+        }
+        else if (opt == '3')
+        {
+          digitalWrite(LED_RED, HIGH);
+          Serial.println("Red led has been turned on");
+        }
+        else if (opt == '4')
+        {
+          digitalWrite(LED_RED, LOW);
+          Serial.println("Red led has been turned off");
+        }
+        else if (opt == '5')
+        {
+          digitalWrite(LED_YELLOW, HIGH);
+          Serial.println("Yellow led has been turned on");
+        }
+        else if (opt == '6')
+        {
+          digitalWrite(LED_YELLOW, LOW);
+          Serial.println("Yellow led has been turned off");
+        }
+        else if (opt == '7')
+        {
+          digitalWrite(LED_GREEN, HIGH);
+          digitalWrite(LED_RED, HIGH);
+          digitalWrite(LED_YELLOW, HIGH);
+          Serial.println("All the lights have been turned on");
+        }
+        else if (opt == '8')
+        {
+          digitalWrite(LED_GREEN, LOW);
+          digitalWrite(LED_RED, LOW);
+          digitalWrite(LED_YELLOW, LOW);
+          Serial.println("All the lights have been turned off");
+        }
+        else if (opt == '9')
+        {
+          flashingMode = true; // Reingresar al modo intermitente
+          Serial.println("Flashing mode activated");
+        }
+        else
+        {
+          Serial.println("Invalid option. Try again.");
+        }
+      }
+    }
+  }
+
+  if (flashingMode) // Si estamos en el modo intermitente
+  {
+    digitalWrite(LED_GREEN, HIGH);
+    digitalWrite(LED_RED, HIGH);
+    digitalWrite(LED_YELLOW, HIGH);
+    delay(250);
+    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_YELLOW, LOW);
+    delay(250);
+  }
+}
